@@ -1,0 +1,32 @@
+{
+  "csdn": {
+    "name": "CSDN",
+    "distinctBy": "",
+    "partitions": [],
+    "filterConditions": "1=1",
+    "columnsPicker": {
+      "author": "blogger",
+      "title": "job_title",
+      "published_date": "published_date",
+      "location": "concat_ws(',',province,city)",
+      "education": "education",
+      "province": "province",
+      "city": "city",
+      "id_card_no": "id_card_no"
+    }
+  },
+  "juejin": {
+    "name": "juejin",
+    "distinctBy": "",
+    "partitions": [],
+    "filterConditions": "1=1",
+    "columnsPicker": {
+      "author": "writer",
+      "title": "occupation",
+      "published_date": "published_date",
+      "location": "location",
+      "education": "education",
+      "id_card_no": "idcardno"
+    }
+  }
+}
