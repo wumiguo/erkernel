@@ -8,8 +8,8 @@ import org.scalatest.flatspec.AnyFlatSpec
  */
 class GeneratorArgsParserTest extends AnyFlatSpec {
   it should "parse args" in {
-    val args = Array("-execId", "001", "-appConfPath", "application.yml", "-kernelConfPath", "erKernel.yml")
-    val result = GeneratorArgsParser.parseArgs(args)
+    val args = Array("-execId", "001", "-appConfPath", "application.yml", "-kernelConfPath", "erKernel.yml", "-dataSourcesDir", "pipelineDataSources.json")
+    val result = GeneratorArgsParser.collectVertexArgs(args)
     assertResult(result.executionId)("001")
     assertResult(result.appConfigPath)("application.yml")
     assertResult(result.kernelConfigPath)("erKernel.yml")

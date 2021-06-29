@@ -1,0 +1,54 @@
+{
+  "base": {
+    "name": "BASE",
+    "distinctBy": "",
+    "partitions": [
+      "published_date"
+    ],
+    "filterConditions": "1=1",
+    "columnsPicker": {
+      "author": "blogger",
+      "title": "job_title",
+      "published_date": "published_date",
+      "location": "concat_ws('-',city,province)",
+      "education": "education",
+      "province": "province",
+      "city": "city",
+      "id_card_no": "id_card_nod"
+    }
+  },
+  "cnplinker": {
+    "name": "ZGTSImpExp",
+    "distinctBy": "",
+    "partitions": [
+      "published_date"
+    ],
+    "filterConditions": "1=1",
+    "columnsPicker": {
+      "author": "writer",
+      "title": "occupation",
+      "published_date": "published_date",
+      "location": "location",
+      "education": "education",
+      "id_card_no": "id_card_nod"
+    }
+  },
+  "baiduxueshu": {
+    "name": "BaiduXueshu",
+    "distinctBy": "",
+    "partitions": [
+      "published_date"
+    ],
+    "filterConditions": "1=1",
+    "columnsPicker": {
+      "author": "creator",
+      "title": "occupation",
+      "published_date": "released_date",
+      "location": "concat_ws('-',city,province)",
+      "education": "concat_ws('@',degree,school)",
+      "school": "school",
+      "degree": "degree",
+      "id_card_no": "idcardno"
+    }
+  }
+}

@@ -1,21 +1,17 @@
-package org.wumiguo.erkernel.testutil
+package org.wumiguo.erkernel.common
 
 import org.apache.spark.SparkConf
 import org.apache.spark.sql.SparkSession
 import org.slf4j.LoggerFactory
-import org.wumiguo.erkernel.common.SparkAppConfiguration
 
 /**
  * @author levinliu
- *         Created on 2020/9/28
- *         (Change file header on Settings -> Editor -> File and Code Templates)
+ *         Created on 2021/6/21
  */
-trait SparkTestingEnvSetup {
-  implicit val log = LoggerFactory.getLogger(this.getClass.getName)
+trait SparkEnvSetup {
+  val log = LoggerFactory.getLogger(this.getClass.getName)
   var appConfig = scala.collection.Map[String, Any]()
   var sparkSession: SparkSession = null
-  implicit val spark = createTestingSparkSession(getClass.getName)
-
 
   def createSparkSession(applicationName: String, appConf: SparkAppConfiguration = null): SparkSession = {
     try {
@@ -42,7 +38,7 @@ trait SparkTestingEnvSetup {
     }
   }
 
-  def createTestingSparkSession(applicationName: String, outputDir: String = "/tmp/er"): SparkSession = {
+  def createLocalSparkSession(applicationName: String, configPath: String = null, outputDir: String = "/tmp/er"): SparkSession = {
     try {
       if (sparkSession == null || sparkSession.sparkContext.isStopped) {
         val sparkConf = new SparkConf()

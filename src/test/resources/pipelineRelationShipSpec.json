@@ -1,0 +1,20 @@
+{
+  "inherent_alumni_baiduxueshu": {
+    "subject": "baiduxueshu",
+    "counterParty": "baiduxueshu",
+    "relationShipLabel": "the_inherent",
+    "relationLogic": "subject.school=counterParty.school"
+  },
+  "inherent_working_level_cnplinker": {
+    "subject": "cnplinker",
+    "counterParty": "cnplinker",
+    "relationShipLabel": "the_inherent",
+    "relationLogic": "subject.occupation=counterParty.occupation"
+  },
+  "external_group_baiduxueshu_vs_base": {
+    "subject": "baiduxueshu",
+    "counterParty": "base",
+    "relationShipLabel": "the_inherent",
+    "relationLogic": "subject.group=counterParty.group"
+  }
+}
