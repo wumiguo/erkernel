@@ -1,0 +1,11 @@
+{
+  "connected_party_with_the_inherent": {
+    "triplets_output_name": "connectedPartyTriplets.parq",
+    "vertex_output_name": "connectedPartyVertices.parq",
+    "connected_comp_attr_name": "ccaid",
+    "relationship_inclusion": [
+      "the_inherent"
+    ],
+    "relationship_exclusion": []
+  }
+}

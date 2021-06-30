@@ -60,11 +60,13 @@ object VertexGenerator extends Generator {
       .withColumn("party_unique_key", org.apache.spark.sql.functions.xxhash64(col(s"$pukColumn")))
       .withColumn("execution_id", lit(execId))
       .withColumn("execution_timestamp", lit(currentTime))
+      .withColumn("source", lit(dataSource))
     //standardization
     val outputDataSourcePath = s"${outputDir}/dataSource=${config.sourceName}"
     LOG.info(s"save ${dataSource} output  to ${outputDataSourcePath}")
     if (PRINT_JSON_SAMPLE) {
-      enrichedDf.sample(0.15).write.mode(SaveMode.Overwrite).json(outputDataSourcePath + ".json")
+      val samplingOutputPath = s"${outputDir}/../sampleVJson/dataSource=${config.sourceName}.json"
+      enrichedDf.sample(0.15).write.mode(SaveMode.Overwrite).json(samplingOutputPath)
     }
     enrichedDf.write.mode(SaveMode.Overwrite).parquet(outputDataSourcePath)
     enrichedDf

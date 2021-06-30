@@ -23,12 +23,13 @@ object EdgeGenerator extends Generator {
     val saltCondition = " and subject.salt_id = counterParty.salt_id "
     val sql =
       s"""
-         with subject as (select * from dataSourceVertices where source = '${relationShip.subject}' ),
-         with counterParty as (select * from dataSourceVertices where source = '${relationShip.counterParty}' )
+         with
+            subject as (select * from vertexDfSalted where source = '${relationShip.subject}' ),
+            counterParty as (select * from vertexDfExpanded where source = '${relationShip.counterParty}' )
          select distinct
             least(subject.party_unique_key, counterParty.party_unique_key ) party_unique_key_from,
             '${relationShip.relationShipLabel}' as edge_property,
-            greatest(subject.party_unique_key, counterParty.party_unique_key ) party_unique_key_to,
+            greatest(subject.party_unique_key, counterParty.party_unique_key ) party_unique_key_to
          from subject
          inner join counterParty
          on (
@@ -44,22 +45,30 @@ object EdgeGenerator extends Generator {
   }
 
   override def generate(args: Array[String])(implicit spark: SparkSession): Unit = {
-    LOG.info("will execute vertex generation")
+    LOG.info("will execute edge generation")
     val generatorArgs = GeneratorArgsParser.collectEdgeArgs(args)
     LOG.info(s"args: $generatorArgs")
     val jsonPath = generatorArgs.kernelConfigPath
-    val dataSourcesDir = generatorArgs.dataSourcesDir
-    val edgeOutputDir = generatorArgs.vertexOutputDir
+    val vertexInputDir = generatorArgs.vertexInputDir
+    val execId = generatorArgs.executionId
+    val edgeOutputDir = generatorArgs.edgeOutputDir
     val relationShipDict = RelationShipConfigLoader.loadJsonFileAsRelationShipDict(jsonPath)
-    val dataSourceVertices = spark.read.option("mergeSchema", "true").parquet(dataSourcesDir)
+    val dataSourceVertices = spark.read.option("mergeSchema", "true").parquet(vertexInputDir)
+    if (PRINT_JSON_SAMPLE) {
+      val samplePath = s"$edgeOutputDir/../sampleVMergedJson/execution=${execId}.json"
+      dataSourceVertices.sample(0.15).write.mode(SaveMode.Overwrite).json(samplePath)
+    }
     dataSourceVertices.createOrReplaceTempView("dataSourceVertices")
     val saltFactor = 16
-    val vertexDf = spark.sql(s"select dv.*, abs(mod(party_unique_key,$saltFactor)) salt_id from dataSourceVertices dv")
-    vertexDf.createOrReplaceTempView("vertexDf")
+    val vertexDfSalted = spark.sql(s"select dv.*, abs(mod(party_unique_key,$saltFactor)) salt_id from dataSourceVertices dv")
+    vertexDfSalted.createOrReplaceTempView("vertexDfSalted")
     val vertexDfExpanded = spark.sql(s"select dv.* from dataSourceVertices dv")
       .withColumn("salt_array", array(Range(0, saltFactor).toList.map(lit): _*))
+    val vertexDfSaltedExpanded = vertexDfExpanded.withColumn("salt_id", explode(vertexDfExpanded("salt_array")))
+      .drop("salt_array")
+    vertexDfSaltedExpanded.createOrReplaceTempView("vertexDfExpanded")
+
     val currentTime = DateTimeFormatter.ofPattern("yyyyMMdd_HHmm").format(LocalDateTime.now)
-    val execId = generatorArgs.executionId
     relationShipDict.dict.par.foreach {
       case (_, relationShip) => {
         val df = createEdgeDfPerRelationShip(relationShip)
@@ -69,7 +78,8 @@ object EdgeGenerator extends Generator {
         val outputPath = s"$edgeOutputDir/relationship=${relationShip.relationId}"
         df.write.mode(SaveMode.Overwrite).parquet(outputPath)
         if (PRINT_JSON_SAMPLE) {
-          df.sample(0.15).write.mode(SaveMode.Overwrite).json(outputPath + ".json")
+          val samplePath = s"$edgeOutputDir/../sampleEdgeJson/relationship=${relationShip.relationId}.json"
+          df.sample(0.15).write.mode(SaveMode.Overwrite).json(samplePath)
         }
       }
     }

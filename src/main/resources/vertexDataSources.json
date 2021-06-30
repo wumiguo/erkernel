@@ -14,7 +14,8 @@
       "education": "education",
       "province": "province",
       "city": "city",
-      "id_card_no": "id_card_nod"
+      "id_card_no": "id_card_nod",
+      "group": "grp"
     }
   },
   "cnplinker": {
@@ -30,7 +31,8 @@
       "published_date": "published_date",
       "location": "location",
       "education": "education",
-      "id_card_no": "id_card_nod"
+      "id_card_no": "id_card_nod",
+      "group": "group"
     }
   },
   "baiduxueshu": {
@@ -48,7 +50,8 @@
       "education": "concat_ws('@',degree,school)",
       "school": "school",
       "degree": "degree",
-      "id_card_no": "idcardno"
+      "id_card_no": "idcardno",
+      "group": "group"
     }
   }
 }
