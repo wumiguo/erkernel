@@ -6,16 +6,15 @@ import java.time.format.DateTimeFormatter
 import org.apache.spark.sql.{DataFrame, SaveMode, SparkSession}
 import org.wumiguo.erkernel.configuration.GeneratorArgsParser
 import org.wumiguo.erkernel.io.{DataSourceConfigLoader, RelationShipConfigLoader}
-import org.wumiguo.erkernel.pipeline.VertexGenerator.{LOG, PRINT_JSON_SAMPLE}
 import org.apache.spark.sql.functions._
 import org.wumiguo.erkernel.model.RelationShip
+import org.wumiguo.erkernel.util.DataSampler
 
 /**
  * @author levin 
  *         Created on 2021/6/22
  */
 object EdgeGenerator extends Generator {
-  val PRINT_JSON_SAMPLE = true
 
   def createEdgeDfPerRelationShip(relationShip: RelationShip)(implicit spark: SparkSession): DataFrame = {
     LOG.info(s"Apply relationship ${relationShip.relationId}")
@@ -54,10 +53,8 @@ object EdgeGenerator extends Generator {
     val edgeOutputDir = generatorArgs.edgeOutputDir
     val relationShipDict = RelationShipConfigLoader.loadJsonFileAsRelationShipDict(jsonPath)
     val dataSourceVertices = spark.read.option("mergeSchema", "true").parquet(vertexInputDir)
-    if (PRINT_JSON_SAMPLE) {
-      val samplePath = s"$edgeOutputDir/../sampleVMergedJson/execution=${execId}.json"
-      dataSourceVertices.sample(0.15).write.mode(SaveMode.Overwrite).json(samplePath)
-    }
+    DataSampler.sample(dataSourceVertices, s"${edgeOutputDir}/../sampleVMerged/execution=${execId}")
+
     dataSourceVertices.createOrReplaceTempView("dataSourceVertices")
     val saltFactor = 16
     val vertexDfSalted = spark.sql(s"select dv.*, abs(mod(party_unique_key,$saltFactor)) salt_id from dataSourceVertices dv")
@@ -77,10 +74,7 @@ object EdgeGenerator extends Generator {
           .withColumn("execution_timestamp", lit(currentTime))
         val outputPath = s"$edgeOutputDir/relationship=${relationShip.relationId}"
         df.write.mode(SaveMode.Overwrite).parquet(outputPath)
-        if (PRINT_JSON_SAMPLE) {
-          val samplePath = s"$edgeOutputDir/../sampleEdgeJson/relationship=${relationShip.relationId}.json"
-          df.sample(0.15).write.mode(SaveMode.Overwrite).json(samplePath)
-        }
+        DataSampler.sample(df, s"${edgeOutputDir}/../sampleEdge/execution=${execId}")
       }
     }
   }

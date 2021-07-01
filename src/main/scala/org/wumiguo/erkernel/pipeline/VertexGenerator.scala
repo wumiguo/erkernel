@@ -22,8 +22,6 @@ object VertexGenerator extends Generator {
    */
   val DEFAULT_PUK_COLUMN = "id_card_no"
 
-  val PRINT_JSON_SAMPLE = true
-
   def selectFiltering(dataSource: String, dsConfig: DataSource, pukColumn: String = DEFAULT_PUK_COLUMN)(implicit spark: SparkSession): DataFrame = {
     val selectStmt = dsConfig.columnSpec.map {
       case (fieldMapTo, fieldMapFrom) => {
@@ -64,7 +62,7 @@ object VertexGenerator extends Generator {
     //standardization
     val outputDataSourcePath = s"${outputDir}/dataSource=${config.sourceName}"
     LOG.info(s"save ${dataSource} output  to ${outputDataSourcePath}")
-    if (PRINT_JSON_SAMPLE) {
+    if (RUN_JSON_SAMPLE) {
       val samplingOutputPath = s"${outputDir}/../sampleVJson/dataSource=${config.sourceName}.json"
       enrichedDf.sample(0.15).write.mode(SaveMode.Overwrite).json(samplingOutputPath)
     }
