@@ -53,7 +53,7 @@ object EdgeGenerator extends Generator {
     val edgeOutputDir = generatorArgs.edgeOutputDir
     val relationShipDict = RelationShipConfigLoader.loadJsonFileAsRelationShipDict(jsonPath)
     val dataSourceVertices = spark.read.option("mergeSchema", "true").parquet(vertexInputDir)
-    DataSampler.sample(dataSourceVertices, s"${edgeOutputDir}/../sampleVMerged/execution=${execId}")
+    DataSampler.sample(dataSourceVertices, s"${edgeOutputDir}/../samples/e01VMerged/execution=${execId}")
 
     dataSourceVertices.createOrReplaceTempView("dataSourceVertices")
     val saltFactor = 16
@@ -74,7 +74,7 @@ object EdgeGenerator extends Generator {
           .withColumn("execution_timestamp", lit(currentTime))
         val outputPath = s"$edgeOutputDir/relationship=${relationShip.relationId}"
         df.write.mode(SaveMode.Overwrite).parquet(outputPath)
-        DataSampler.sample(df, s"${edgeOutputDir}/../sampleEdge/execution=${execId}")
+        DataSampler.sample(df, s"${edgeOutputDir}/../samples/e02ESamples/relationship=${relationShip.relationId}_execution=${execId}")
       }
     }
   }

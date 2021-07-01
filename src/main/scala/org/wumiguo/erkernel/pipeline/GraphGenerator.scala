@@ -8,10 +8,9 @@ import org.apache.spark.rdd.RDD
 import org.apache.spark.sql.{SaveMode, SparkSession}
 import org.wumiguo.erkernel.configuration.{GeneratorArgsParser, GraphGeneratorArgs}
 import org.wumiguo.erkernel.io.GraphResultSettingConfigLoader
-import org.wumiguo.erkernel.model.GraphResultSetting
+import org.wumiguo.erkernel.model.{GraphResultSetting, TripleModel}
 import org.apache.spark.sql.functions._
 import org.apache.spark.storage.StorageLevel
-import org.wumiguo.erkernel.pipeline.EdgeGenerator.RUN_JSON_SAMPLE
 import org.wumiguo.erkernel.util.DataSampler
 
 /**
@@ -31,7 +30,7 @@ object GraphGenerator extends Generator {
       "group" -> row.getString(3)
     )))
     val execId = generatorArgs.executionId
-    DataSampler.sample(svRdd.toDF(), s"${generatorArgs.graphOutputPath}/../g01sampleSelectedVJson/execution=${execId}")
+    DataSampler.sample(svRdd.toDF(), s"${generatorArgs.graphOutputPath}/../samples/g01sampleSelectedVJson/execution=${execId}")
 
     val relationshipSql =
       s""" select * from relationshipEdges
@@ -40,14 +39,14 @@ object GraphGenerator extends Generator {
     val relationShipDf = spark.sql(relationshipSql)
     val selectiveRelationshipRdd = relationShipDf.select("party_unique_key_from", "party_unique_key_to", "edge_property", "relationship")
       .distinct.rdd
-    val sreRdd: RDD[Edge[Array[String]]] = selectiveRelationshipRdd.map(row => Edge(
+    val selectiveRelationShipEdgeRdd: RDD[Edge[Array[String]]] = selectiveRelationshipRdd.map(row => Edge(
       row.getLong(0),
       row.getLong(1),
       Array(row.getString(2), row.getString(3)))
     ).cache()
-    DataSampler.sample(sreRdd.toDF(), s"${generatorArgs.graphOutputPath}/../g02sampleCachedREdgeJson/execution=${execId}")
+    DataSampler.sample(selectiveRelationShipEdgeRdd.toDF(), s"${generatorArgs.graphOutputPath}/../samples/g02sampleCachedREdgeJson/execution=${execId}")
 
-    val graph = Graph(svRdd, sreRdd, Map[String, String](
+    val graph = Graph(svRdd, selectiveRelationShipEdgeRdd, Map[String, String](
       "key" -> "NotFound",
       "name" -> "NotFound",
       "group" -> "NotFound"
@@ -61,34 +60,34 @@ object GraphGenerator extends Generator {
            end
           """.stripMargin))
       .drop("ccId")
-    DataSampler.sample(connectedComponents, s"${generatorArgs.graphOutputPath}/../g03sampleCCVerticesJson/execution=${execId}")
+    DataSampler.sample(connectedComponents, s"${generatorArgs.graphOutputPath}/../samples/g03sampleCCVerticesJson/execution=${execId}")
     val triangleDf = graph.triangleCount().vertices.toDF("vertex_id", "triangle_count")
-    DataSampler.sample(triangleDf, s"${generatorArgs.graphOutputPath}/../g04sampleTriangleDf/execution=${execId}")
+    DataSampler.sample(triangleDf, s"${generatorArgs.graphOutputPath}/../samples/g04sampleTriangleDf/execution=${execId}")
 
     val algoJoinDF = connectedComponents.join(triangleDf, Seq("vertex_id"), "inner").persist(StorageLevel.MEMORY_AND_DISK)
-    DataSampler.sample(algoJoinDF, s"${generatorArgs.graphOutputPath}/../g05sampleAlgoJoinDF/execution=${execId}")
+    DataSampler.sample(algoJoinDF, s"${generatorArgs.graphOutputPath}/../samples/g05sampleAlgoJoinDF/execution=${execId}")
 
     val vertexEnrichDf = vertexDf
       .join(algoJoinDF, vertexDf("party_unique_key") === algoJoinDF("vertex_id"), "inner")
       .drop("vertex_id")
-    DataSampler.sample(vertexEnrichDf, s"${generatorArgs.graphOutputPath}/../g06sampleVertexEnrichDf/execution=${execId}")
+    DataSampler.sample(vertexEnrichDf, s"${generatorArgs.graphOutputPath}/../samples/g06sampleVertexEnrichDf/execution=${execId}")
     val vertexOutputPath = s"${generatorArgs.graphOutputPath}/${config.vertexOutputName}"
     vertexEnrichDf.write.mode(SaveMode.Overwrite).format("parquet").save(vertexOutputPath)
     val tripletsDf = graph.triplets.map((x: EdgeTriplet[Map[String, String], Array[String]]) => {
-      Map[String, String](
-        "idFrom" -> x.srcId.toString,
-        "keyFrom" -> x.srcAttr("key"),
-        "nameFrom" -> x.srcAttr("name"),
-        "groupFrom" -> x.srcAttr("group"),
-        "idTo" -> x.dstId.toString,
-        "keyTo" -> x.dstAttr("key"),
-        "nameTo" -> x.dstAttr("name"),
-        "groupTo" -> x.dstAttr("group"),
-        "edgeProperty" -> x.attr(0),
-        "relationship" -> x.attr(1)
+      TripleModel(
+        idFrom = x.srcId,
+        keyFrom = x.srcAttr("key"),
+        nameFrom = x.srcAttr("name"),
+        groupFrom = x.srcAttr("group"),
+        idTo = x.dstId,
+        keyTo = x.dstAttr("key"),
+        nameTo = x.dstAttr("name"),
+        groupTo = x.dstAttr("group"),
+        edgeProperty = x.attr(0),
+        relationShip = x.attr(1)
       )
     }).toDF()
-    DataSampler.sample(tripletsDf, s"${generatorArgs.graphOutputPath}/../g07sampleTripletsDf/execution=${execId}")
+    DataSampler.sample(tripletsDf, s"${generatorArgs.graphOutputPath}/../samples/g07sampleTripletsDf/execution=${execId}")
 
     val currentTime = DateTimeFormatter.ofPattern("yyyyMMdd_HHmm").format(LocalDateTime.now)
     val tripletsWithCCDF = tripletsDf
@@ -98,7 +97,7 @@ object GraphGenerator extends Generator {
       .withColumn("execution_timestamp", lit(currentTime))
     val tripleOutPath = s"${generatorArgs.graphOutputPath}/${config.tripletsOutputName}"
     tripletsWithCCDF.repartition(50).write.mode(SaveMode.Overwrite).format("parquet").save(tripleOutPath)
-    DataSampler.sample(tripletsWithCCDF, s"${generatorArgs.graphOutputPath}/../g08sampleTripletsCCDf/execution=${execId}")
+    DataSampler.sample(tripletsWithCCDF, s"${generatorArgs.graphOutputPath}/../samples/g08sampleTripletsCCDf/execution=${execId}")
   }
 
 

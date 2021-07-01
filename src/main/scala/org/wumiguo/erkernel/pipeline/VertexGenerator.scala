@@ -8,7 +8,7 @@ import org.wumiguo.erkernel.configuration.GeneratorArgsParser
 import org.wumiguo.erkernel.io.{DataSourceConfigLoader, DataSourceLoader}
 import org.wumiguo.erkernel.model.{DataSource, DataSourceDict}
 import org.wumiguo.erkernel.standardization.FieldStandardiser
-import org.wumiguo.erkernel.util.TempViewsCreator
+import org.wumiguo.erkernel.util.{DataSampler, TempViewsCreator}
 import org.apache.spark.sql.functions._
 import org.wumiguo.erkernel.common.ERKernelError
 
@@ -62,10 +62,7 @@ object VertexGenerator extends Generator {
     //standardization
     val outputDataSourcePath = s"${outputDir}/dataSource=${config.sourceName}"
     LOG.info(s"save ${dataSource} output  to ${outputDataSourcePath}")
-    if (RUN_JSON_SAMPLE) {
-      val samplingOutputPath = s"${outputDir}/../sampleVJson/dataSource=${config.sourceName}.json"
-      enrichedDf.sample(0.15).write.mode(SaveMode.Overwrite).json(samplingOutputPath)
-    }
+    DataSampler.sample(enrichedDf, s"${outputDir}/../samples/v01/dataSource=${config.sourceName}")
     enrichedDf.write.mode(SaveMode.Overwrite).parquet(outputDataSourcePath)
     enrichedDf
   }

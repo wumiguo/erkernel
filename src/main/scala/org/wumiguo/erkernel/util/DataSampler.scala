@@ -10,7 +10,7 @@ import org.wumiguo.erkernel.common.Loggable
  */
 object DataSampler extends Loggable {
   private val RUN_JSON_SAMPLE = true
-  private val SAMPLE_FRACTION = 0.15
+  private val SAMPLE_FRACTION = 1 //0.15
   private val DEFAULT_TYPE = "json"
 
   def sample(df: DataFrame, filePath: String): Unit = {
@@ -20,7 +20,8 @@ object DataSampler extends Loggable {
       } else {
         s"${filePath}.${DEFAULT_TYPE}"
       }
-      if (samplePath.endsWith(DEFAULT_TYPE)) {
+      LOG.info(s"sample data to $samplePath")
+      if (samplePath.endsWith(".csv")) {
         df.sample(SAMPLE_FRACTION).write.mode(SaveMode.Overwrite).csv(samplePath)
       } else {
         df.sample(SAMPLE_FRACTION).write.mode(SaveMode.Overwrite).json(samplePath)
