@@ -16,5 +16,11 @@
     "counterParty": "baiduxueshu",
     "relationShipLabel": "the_inherent",
     "relationLogic": "subject.group=counterParty.group"
+  },
+  "external_membership_baiduxueshu": {
+    "subject": "cnplinker",
+    "counterParty": "baiduxueshu",
+    "relationShipLabel": "the_external",
+    "relationLogic": "subject.group=counterParty.group"
   }
 }
