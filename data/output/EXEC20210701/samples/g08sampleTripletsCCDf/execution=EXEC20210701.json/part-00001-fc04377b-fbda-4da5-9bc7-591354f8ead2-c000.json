@@ -1,1 +1,16 @@
-{"idFrom":-4571651996535782841,"keyFrom":"440283197802024332","nameFrom":"LiMing","groupFrom":"MEM_XA02","idTo":2730295944136219213,"keyTo":"440883197802024382","nameTo":"ChenApple","groupTo":"MEM_XA02","edgeProperty":"the_inherent","relationShip":"inherent_membership_baiduxueshu","ccaid":"N4571651996535782841","triangle_count":5,"execution_id":"EXEC20210701","execution_timestamp":"20210702_0942"}
+{
+  "idFrom": -4571651996535782841,
+  "keyFrom": "440283197802024332",
+  "nameFrom": "LiMing",
+  "groupFrom": "MEM_XA02",
+  "idTo": 2730295944136219213,
+  "keyTo": "440883197802024382",
+  "nameTo": "ChenApple",
+  "groupTo": "MEM_XA02",
+  "edgeProperty": "the_inherent",
+  "relationShip": "inherent_membership_baiduxueshu",
+  "ccaid": "N4571651996535782841",
+  "triangle_count": 5,
+  "execution_id": "EXEC20210701",
+  "execution_timestamp": "20210702_0942"
+}
