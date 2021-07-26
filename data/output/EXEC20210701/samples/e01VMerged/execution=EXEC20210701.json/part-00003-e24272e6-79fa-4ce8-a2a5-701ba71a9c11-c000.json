@@ -1,6 +1,90 @@
-{"dedupe_ordering_key":1,"author":"WuXinXin","education":"Master","group":"NA","id_card_no":"440983197802024339","location":"CD-SC","published_date":"20220108","title":"Engineer","party_unique_key":-1499000605954448310,"execution_id":"EXEC20210701","execution_timestamp":"20210702_0932","source":"cnplinker","dataSource":"ZGTSImpExp"}
-{"dedupe_ordering_key":1,"author":"WangZheng","education":"PhD","group":"NA","id_card_no":"440183197802024311","location":"ST-GD","published_date":"20220101","title":"Researcher","party_unique_key":5997663916342665744,"execution_id":"EXEC20210701","execution_timestamp":"20210702_0932","source":"cnplinker","dataSource":"ZGTSImpExp"}
-{"dedupe_ordering_key":1,"author":"ChenApple","education":"PhD","group":"NA","id_card_no":"440883197802024382","location":"BJ-BJ","published_date":"20220107","title":"Researcher","party_unique_key":2730295944136219213,"execution_id":"EXEC20210701","execution_timestamp":"20210702_0932","source":"cnplinker","dataSource":"ZGTSImpExp"}
-{"dedupe_ordering_key":1,"author":"DuWei","education":"Bachelor","group":"NA","id_card_no":"440383197802024332","location":"GZ-GD","published_date":"20220102","title":"Engineer","party_unique_key":5417079491934453839,"execution_id":"EXEC20210701","execution_timestamp":"20210702_0932","source":"cnplinker","dataSource":"ZGTSImpExp"}
-{"dedupe_ordering_key":1,"author":"LiuHong","education":"PhD","group":"NA","id_card_no":"440083197802024330","location":"HZ-ZJ","published_date":"20220109","title":"Researcher","party_unique_key":1682908566977967526,"execution_id":"EXEC20210701","execution_timestamp":"20210702_0932","source":"cnplinker","dataSource":"ZGTSImpExp"}
-{"dedupe_ordering_key":1,"author":"LiMing","education":"PhD","group":"NA","id_card_no":"440283197802024332","location":"GZ-GD","published_date":"20220101","title":"Director","party_unique_key":-4571651996535782841,"execution_id":"EXEC20210701","execution_timestamp":"20210702_0932","source":"cnplinker","dataSource":"ZGTSImpExp"}
+{
+  "dedupe_ordering_key": 1,
+  "author": "WuXinXin",
+  "education": "Master",
+  "group": "NA",
+  "id_card_no": "440983197802024339",
+  "location": "CD-SC",
+  "published_date": "20220108",
+  "title": "Engineer",
+  "party_unique_key": -1499000605954448310,
+  "execution_id": "EXEC20210701",
+  "execution_timestamp": "20210702_0932",
+  "source": "cnplinker",
+  "dataSource": "ZGTSImpExp"
+}
+{
+  "dedupe_ordering_key": 1,
+  "author": "WangZheng",
+  "education": "PhD",
+  "group": "NA",
+  "id_card_no": "440183197802024311",
+  "location": "ST-GD",
+  "published_date": "20220101",
+  "title": "Researcher",
+  "party_unique_key": 5997663916342665744,
+  "execution_id": "EXEC20210701",
+  "execution_timestamp": "20210702_0932",
+  "source": "cnplinker",
+  "dataSource": "ZGTSImpExp"
+}
+{
+  "dedupe_ordering_key": 1,
+  "author": "ChenApple",
+  "education": "PhD",
+  "group": "NA",
+  "id_card_no": "440883197802024382",
+  "location": "BJ-BJ",
+  "published_date": "20220107",
+  "title": "Researcher",
+  "party_unique_key": 2730295944136219213,
+  "execution_id": "EXEC20210701",
+  "execution_timestamp": "20210702_0932",
+  "source": "cnplinker",
+  "dataSource": "ZGTSImpExp"
+}
+{
+  "dedupe_ordering_key": 1,
+  "author": "DuWei",
+  "education": "Bachelor",
+  "group": "NA",
+  "id_card_no": "440383197802024332",
+  "location": "GZ-GD",
+  "published_date": "20220102",
+  "title": "Engineer",
+  "party_unique_key": 5417079491934453839,
+  "execution_id": "EXEC20210701",
+  "execution_timestamp": "20210702_0932",
+  "source": "cnplinker",
+  "dataSource": "ZGTSImpExp"
+}
+{
+  "dedupe_ordering_key": 1,
+  "author": "LiuHong",
+  "education": "PhD",
+  "group": "NA",
+  "id_card_no": "440083197802024330",
+  "location": "HZ-ZJ",
+  "published_date": "20220109",
+  "title": "Researcher",
+  "party_unique_key": 1682908566977967526,
+  "execution_id": "EXEC20210701",
+  "execution_timestamp": "20210702_0932",
+  "source": "cnplinker",
+  "dataSource": "ZGTSImpExp"
+}
+{
+  "dedupe_ordering_key": 1,
+  "author": "LiMing",
+  "education": "PhD",
+  "group": "NA",
+  "id_card_no": "440283197802024332",
+  "location": "GZ-GD",
+  "published_date": "20220101",
+  "title": "Director",
+  "party_unique_key": -4571651996535782841,
+  "execution_id": "EXEC20210701",
+  "execution_timestamp": "20210702_0932",
+  "source": "cnplinker",
+  "dataSource": "ZGTSImpExp"
+}

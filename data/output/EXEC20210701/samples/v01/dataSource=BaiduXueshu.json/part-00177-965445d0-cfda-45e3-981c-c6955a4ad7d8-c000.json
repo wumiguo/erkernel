@@ -1,1 +1,16 @@
-{"dedupe_ordering_key":1,"author":"GaoZhan","degree":"PhD","education":"PhD@SD","group":"MEM_XA02","id_card_no":"440583197802024332","location":"ShenZhen-GD","published_date":"20220104","school":"SD","title":"Researcher","party_unique_key":1188065597377299434,"execution_id":"EXEC20210701","execution_timestamp":"20210702_0932","source":"baiduxueshu"}
+{
+  "dedupe_ordering_key": 1,
+  "author": "GaoZhan",
+  "degree": "PhD",
+  "education": "PhD@SD",
+  "group": "MEM_XA02",
+  "id_card_no": "440583197802024332",
+  "location": "ShenZhen-GD",
+  "published_date": "20220104",
+  "school": "SD",
+  "title": "Researcher",
+  "party_unique_key": 1188065597377299434,
+  "execution_id": "EXEC20210701",
+  "execution_timestamp": "20210702_0932",
+  "source": "baiduxueshu"
+}

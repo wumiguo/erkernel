@@ -13,7 +13,7 @@ class RelationShipConfigLoaderTest extends AnyFlatSpec {
     val jsonPath = TestDirs.resolvePath("pipelineRelationShipSpec.json")
     val result = RelationShipConfigLoader.loadJsonFileAsRelationShipDict(jsonPath)
     assertResult(result.dict("inherent_alumni_baiduxueshu"))(
-      RelationShip("CSDN", "baiduxueshu", "baiduxueshu", "the_inherent", "subject.school=counterParty.school")
+      RelationShip("inherent_alumni_baiduxueshu", "baiduxueshu", "baiduxueshu", "the_inherent", "subject.school=counterParty.school")
     )
   }
 }
