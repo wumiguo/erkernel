@@ -18,8 +18,8 @@ object DataSourceLoader extends Loggable {
   }
 
   def getLastRunPath(parquetFolder: String, partitionBy: String = "run_date")(implicit spark: SparkSession): Seq[String] = {
-    val fs = FileSystem.get(spark.sparkContext.hadoopConfiguration)
     val path = new Path(parquetFolder)
+    val fs = path.getFileSystem(spark.sparkContext.hadoopConfiguration)
     val theRuns: Array[String] = try {
       Array(fs.listStatus(path)
         .map(file => file.getPath)
@@ -38,8 +38,9 @@ object DataSourceLoader extends Loggable {
   }
 
   def getLastDataSourcePaths(dataSourceDataDir: String, dataSourceDict: DataSourceDict)(implicit spark: SparkSession): Map[String, DataSourcePath] = {
-    val fs = FileSystem.get(spark.sparkContext.hadoopConfiguration)
-    val rawParquetPaths = fs.listStatus(new Path(s"$dataSourceDataDir"))
+    val path = new Path(dataSourceDataDir)
+    val fs = path.getFileSystem(spark.sparkContext.hadoopConfiguration)
+    val rawParquetPaths = fs.listStatus(path)
       .filter(_.isDirectory)
       .filter(_.toString.contains(".parq")) //collection *.parq or *.parquet folder
       .map(_.getPath.toString)

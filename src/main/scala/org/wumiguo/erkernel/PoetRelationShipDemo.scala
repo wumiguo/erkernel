@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory
  * @author levin 
  *         Created on 2021/6/23
  */
-object PoetRelationShipDemo {
+object  PoetRelationShipDemo {
 
   def main(args: Array[String]): Unit = {
     val log = LoggerFactory.getLogger(this.getClass.getName)
